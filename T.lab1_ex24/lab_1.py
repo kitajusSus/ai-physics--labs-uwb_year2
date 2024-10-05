@@ -8,9 +8,6 @@ import seaborn as sns
 
 # 0. Otwieranie danych
 file_path = 'lab_1_dane.xlsx'
-
-
-
 # Sprawdzenie, czy plik istnieje
 if os.path.exists(file_path):
     # odczytanie danych z arkusza 
