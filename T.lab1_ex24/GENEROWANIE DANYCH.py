@@ -1,3 +1,4 @@
+'''
 import numpy as np
 import pandas as pd
 
@@ -20,3 +21,4 @@ file_path = 'lab_1_dane.xlsx'
 data.to_excel(file_path, index=False)
 
 print(f'Dane zapisane do {file_path}')
+'''
