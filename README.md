@@ -4,10 +4,10 @@ This repository is going to be used as my safe space to hold my projects for lab
 
 ## Contensts
 ### Thermodynamics
-1. [https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab1_ex24](Thermodynamics Lab no.1 ex.24)
-2. [https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab2_ex9](Thermodynamics Lab no.2 ex.9)
-3. [https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab3_ex17](Thermodynamics Lab no.3 ex.17)
-3. [https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab4_ex31](Thermodynamics Lab no.4 ex.31)
+1. [Thermodynamics Lab no.1 ex.24](https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab1_ex24)
+2. [Thermodynamics Lab no.2 ex.9](https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab2_ex9)
+3. [Thermodynamics Lab no.3 ex.17](https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab3_ex17)
+4. [Thermodynamics Lab no.4 ex.31](https://github.com/kitajusSus/ai-physics--labs-uwb_year2/tree/main/T.lab4_ex31)
 
 
 ### Electrodynamics
