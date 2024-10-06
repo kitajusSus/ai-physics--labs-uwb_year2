@@ -3,7 +3,7 @@ import pandas as pd
 
 # Generowanie losowych danych
 np.random.seed(42)  # Ustawienie ziarna losowości
-num_samples = 1000 # Liczba próbek
+num_samples = 50 # Liczba próbek
 
 # Generowanie losowych temperatur (270-400K) i zmian objętości (0.1-1.0)
 temperatures = np.random.uniform(270, 400, num_samples)
@@ -11,8 +11,8 @@ delta_volumes = np.random.uniform(0.1, 1.0, num_samples)
 
 # Tworzenie DataFrame z danymi
 data = pd.DataFrame({
-    'Temperature (K)': temperatures,
-    'Delta Volume': delta_volumes
+    'temperature': temperatures,
+    'delta_volume': delta_volumes
 })
 
 # Zapisanie danych do pliku Excel

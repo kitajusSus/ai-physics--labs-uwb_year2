@@ -5,7 +5,22 @@ import torch
 import torch.nn as nn
 import numpy as np
 import seaborn as sns
-
+"""
+Classes:
+- NeuralNet: Defines the structure of the neural network model.
+Variables:
+- file_path: Path to the Excel file containing the data.
+- df: DataFrame containing the loaded data.
+- temperatures: Tensor containing temperature data.
+- delta_volumes: Tensor containing volume change data.
+- model: Instance of the NeuralNet class.
+- criterion: Loss function (MSE).
+- optimizer: Adam optimizer.
+- num_epochs: Number of training epochs.
+- new_temperatures: Tensor containing new temperature values for prediction.
+- predicted_volumes: Predicted volume changes for the new temperatures.
+- errors: Prediction errors for the training data.
+"""
 # 0. Otwieranie danych
 file_path = 'lab_1_dane.xlsx'
 # Sprawdzenie, czy plik istnieje
@@ -30,9 +45,9 @@ delta_volumes = torch.tensor(delta_volumes, dtype=torch.float32).reshape(-1, 1)
 class NeuralNet(nn.Module):
     def __init__(self):
         super(NeuralNet, self).__init__()
-        self.hidden = nn.Linear(1, 10)  # Warstwa ukryta z 10 neuronami
+        self.hidden = nn.Linear(1, 21)  # Warstwa ukryta z 10 neuronami
         self.relu = nn.ReLU()  # Funkcja aktywacji ReLU
-        self.output = nn.Linear(10, 1)  # Warstwa wyjściowa
+        self.output = nn.Linear(21, 1)  # Warstwa wyjściowa
 
     def forward(self, x):
         x = self.hidden(x)
@@ -74,7 +89,7 @@ for i, temp in enumerate(new_temperatures):
 # 6. Wykres wyników
 import matplotlib.pyplot as plt
 
-# Wykres danych treningowych
+# Wykres danych treningowych i predykcji
 plt.figure(figsize=(10, 5))
 plt.scatter(temperatures.numpy(), delta_volumes.numpy(), label='Dane treningowe', color='blue')
 plt.plot(new_temperatures.numpy(), predicted_volumes, label='Predykcje', color='red')
@@ -88,21 +103,18 @@ plt.show()
 errors = delta_volumes - model(temperatures).detach()
 errors = errors.numpy()
 
-# Wykres błędów
+# Wykres danych treningowych z błędami
 plt.figure(figsize=(10, 5))
-plt.scatter(temperatures.numpy(), errors, label='Błędy predykcji', color='green')
-plt.axhline(y=0, color='r', linestyle='--')
+plt.scatter(temperatures.numpy(), delta_volumes.numpy(), label='Dane treningowe', color='blue')
+plt.plot(new_temperatures.numpy(), predicted_volumes, label='Predykcje', color='red')
+
+# Dodanie błędów do wykresu
+for i in range(len(temperatures)):
+    color = 'green' if errors[i] >= 0 else 'red'
+    plt.plot([temperatures[i], temperatures[i]], [delta_volumes[i], delta_volumes[i] - errors[i]], color=color)
+
 plt.xlabel('Temperatura (K)')
-plt.ylabel('Błąd predykcji')
-plt.title('Błędy predykcji w zależności od temperatury')
+plt.ylabel('Zmiana objętości')
+plt.title('Predykcja zmiany objętości z błędami w zależności od temperatury')
 plt.legend()
-plt.show()
-
-# Mapa cieplna błędów
-
-plt.figure(figsize=(10, 5))
-sns.heatmap(errors.reshape(-1, 1), annot=True, cmap='coolwarm', cbar=True)
-plt.xlabel('Błąd predykcji')
-plt.ylabel('Indeks próbki')
-plt.title('Mapa cieplna błędów predykcji')
 plt.show()
