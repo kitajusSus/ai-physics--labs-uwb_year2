@@ -45,9 +45,9 @@ delta_volumes = torch.tensor(delta_volumes, dtype=torch.float32).reshape(-1, 1)
 class NeuralNet(nn.Module):
     def __init__(self):
         super(NeuralNet, self).__init__()
-        self.hidden = nn.Linear(1, 21)  # Warstwa ukryta z 10 neuronami
+        self.hidden = nn.Linear(1,  10)  # Warstwa ukryta z 10 neuronami
         self.relu = nn.ReLU()  # Funkcja aktywacji ReLU
-        self.output = nn.Linear(21, 1)  # Warstwa wyjściowa
+        self.output = nn.Linear(10, 1)  # Warstwa wyjściowa
 
     def forward(self, x):
         x = self.hidden(x)
