@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 import seaborn as sns
+from sklearn.linear_model import LinearRegression
 """
 Classes:
 - NeuralNet: Defines the structure of the neural network model.
@@ -63,7 +64,37 @@ criterion = nn.MSELoss()  # Funkcja straty - błąd średniokwadratowy (MSE)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)  # Optymalizator Adam
 
 # 4. Trenowanie modelu
-num_epochs = 1000
+num_epochs = 100
+import matplotlib.pyplot as plt
+# List to store loss values for each epoch
+loss_values = []
+
+for epoch in range(num_epochs):
+    # Forward pass (przekazywanie sygnału)
+    outputs = model(temperatures)
+    loss = criterion(outputs, delta_volumes)
+    
+    # Backward pass i optymalizacja
+    optimizer.zero_grad()  # Zerowanie gradientów
+    loss.backward()  # Obliczanie gradientów
+    optimizer.step()  # Aktualizacja wag
+
+    # Store the loss value
+    loss_values.append(loss.item())
+
+    # Co 50 epok wyświetlamy stratę
+    if (epoch+1) % 50 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
+
+# Plotting the loss values
+plt.figure(figsize=(10, 5))
+plt.plot(range(num_epochs), loss_values, label='Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Loss during training')
+plt.legend()
+plt.show()
+
 for epoch in range(num_epochs):
     # Forward pass (przekazywanie sygnału)
     outputs = model(temperatures)
@@ -87,8 +118,6 @@ for i, temp in enumerate(new_temperatures):
     print(f"Przewidywana zmiana objętości dla {temp.item()}K: {predicted_volumes[i][0]:.4f}")
 
 # 6. Wykres wyników
-import matplotlib.pyplot as plt
-
 # Wykres danych treningowych i predykcji
 plt.figure(figsize=(10, 5))
 plt.scatter(temperatures.numpy(), delta_volumes.numpy(), label='Dane treningowe', color='blue')
@@ -117,4 +146,41 @@ plt.xlabel('Temperatura (K)')
 plt.ylabel('Zmiana objętości')
 plt.title('Predykcja zmiany objętości  w zależności od temperatury (z odchyleniami od predykcji)')
 plt.legend()
+plt.show()
+
+# 7. Obliczanie współczynników regresji linioweJ
+# Konwersja tensorów do numpy arrays dla sklearn
+X = temperatures.numpy()
+Y = delta_volumes.numpy()
+
+# Inicjalizacja modelu regresji liniowej
+model = LinearRegression()
+
+# Trenowanie modelu na danych
+model.fit(X, Y)
+
+# Predykcja wartości Y dla danych X
+Y_pred = model.predict(X)
+
+# Obliczanie współczynników regresji
+A = model.coef_[0]
+Delta_A = np.sqrt(np.mean((model.predict(X) - Y) ** 2)) / np.sqrt(len(X)) / np.std(X, ddof=1)
+B = model.intercept_
+Delta_B = np.sqrt(np.mean((model.predict(X) - Y) ** 2)) * np.sqrt(1 / len(X) + np.mean(X ** 2)) / np.std(X, ddof=1)
+
+# Wyświetlanie współczynników regresji
+print("Współczynniki regresji:")
+print("Współczynnik nachylenia (A):", A)
+print("Niepewność współczynnika nachylenia A (Delta_A):", Delta_A)
+print("Wyraz wolny (B):", B)
+print("Niepewność wyrazu wolnego B (Delta_B):", Delta_B)
+
+# Rysowanie wykresu
+plt.errorbar(X.flatten(), Y, fmt='o', color='blue', label='Dane z niepewnościami')
+plt.plot(X.flatten(), Y_pred, color='red', linewidth=2, label='Regresja liniowa')
+plt.xlabel('$X$')
+plt.ylabel('$Y$')
+plt.title('Regresja liniowa z niepewnościami')
+plt.legend()
+plt.grid(True)
 plt.show()
