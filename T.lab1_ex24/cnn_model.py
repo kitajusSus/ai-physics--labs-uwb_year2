@@ -26,7 +26,7 @@ file_path = 'lab_1_dane.xlsx'
 # Sprawdzenie, czy plik istnieje
 if os.path.exists(file_path):
     # odczytanie danych z arkusza 
-    df = pd.read_excel(file_path, sheet_name='Sheet1')
+    df = pd.read_excel(file_path, sheet_name='Arkusz1')
     print(df.head())
 else:
     print(f"Plik {file_path} nie istnieje. Upewnij się, że plik znajduje się w odpowiednim folderze.")
@@ -34,8 +34,8 @@ else:
 
 # 1. Przygotowanie danych
 # Przykładowe dane: temperatury (T) i odpowiadające im zmiany objętości (delta_V)
-temperatures = df['temperature'].values  # Temperatura w Kelvinach
-delta_volumes = df['delta_volume'].values  # Zmiana objętości
+temperatures = df['Delta_T'].values  # Temperatura w Kelvinach
+delta_volumes = df['Delta_V'].values  # Zmiana objętości
 
 # Konwersja danych do tensorów PyTorch
 temperatures = torch.tensor(temperatures, dtype=torch.float32).reshape(-1, 1)  # reshaping na kolumnę
@@ -63,7 +63,7 @@ criterion = nn.MSELoss()  # Funkcja straty - błąd średniokwadratowy (MSE)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)  # Optymalizator Adam
 
 # 4. Trenowanie modelu
-num_epochs = 500
+num_epochs = 1000
 for epoch in range(num_epochs):
     # Forward pass (przekazywanie sygnału)
     outputs = model(temperatures)
@@ -79,7 +79,7 @@ for epoch in range(num_epochs):
         print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.4f}')
 
 # 5. Predykcja dla nowych temperatur
-new_temperatures = torch.tensor([360, 370, 380], dtype=torch.float32).reshape(-1, 1)
+new_temperatures = torch.tensor([0, 40, 100], dtype=torch.float32).reshape(-1, 1)
 predicted_volumes = model(new_temperatures).detach().numpy()
 
 # Wyświetlenie wyników
@@ -115,6 +115,6 @@ for i in range(len(temperatures)):
 
 plt.xlabel('Temperatura (K)')
 plt.ylabel('Zmiana objętości')
-plt.title('Predykcja zmiany objętości z błędami w zależności od temperatury')
+plt.title('Predykcja zmiany objętości  w zależności od temperatury (z odchyleniami od predykcji)')
 plt.legend()
 plt.show()
