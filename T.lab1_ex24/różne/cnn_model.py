@@ -6,6 +6,7 @@ import torch.nn as nn
 import numpy as np
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt
 """
 Classes:
 - NeuralNet: Defines the structure of the neural network model.
@@ -65,7 +66,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.01)  # Optymalizator Adam
 
 # 4. Trenowanie modelu
 num_epochs = 100
-import matplotlib.pyplot as plt
+
 # List to store loss values for each epoch
 loss_values = []
 
